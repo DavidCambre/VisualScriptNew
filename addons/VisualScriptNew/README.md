@@ -14,5 +14,6 @@ Is able to instnace.
 
 **Known Issues**
 Godot/issues/48351
+
 It is not possible to set the color value directly.
 Work arround = Drag in Color from constant
