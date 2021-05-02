@@ -18,18 +18,18 @@ var _instanceable_resource := 0
 var _instanceable_class := 0
 
 export var class_to_instance := "" setget _set_class_to_instance
-export (String, FILE, "*.gd, *.vs, *.tscn, *.tres") var script_to_instance := "" setget _set_script_to_instance
+export (String, FILE, "*.gd, *.vs, *.tscn, *.tres") var resource_to_instance := "" setget _set_resource_to_instance
 var _resource_to_instance : Script
 
-export var edit_property := "type_some_property" setget _update_edit_prop
+export var edit_property := "some_property" setget _update_edit_prop
 export (Array, String) var editing_list := [] setget _set_editing_list
 var editable_list := []
 
 func _get_caption():
 	if _instanceable_resource == INSTANTIATE_NEW:
-		return script_to_instance.get_file().get_basename() + ".new()"
+		return resource_to_instance.get_file().get_basename() + ".new()"
 	elif _instanceable_resource == INSTANTIATE_INSTANCE:
-		return script_to_instance.get_file().get_basename() + ".instance()"
+		return resource_to_instance.get_file().get_basename() + ".instance()"
 	elif _instanceable_class == INSTANTIATE_NEW:
 		return class_to_instance + ".new()"
 	return "New()"
@@ -63,9 +63,9 @@ func _step(inputs, outputs, _start_mode, _working_mem):
 
 func _get_new_instance():
 	if _instanceable_resource == INSTANTIATE_NEW:
-		return load(script_to_instance).new()
+		return load(resource_to_instance).new()
 	elif _instanceable_resource == INSTANTIATE_INSTANCE:
-		return load(script_to_instance).instance()
+		return load(resource_to_instance).instance()
 	elif _instanceable_resource == INSTANTIATE_BASE_ATTACH:
 		var script = load("res://new_script.vs")
 		var obj = ClassDB.instance(script.get_instance_base_type())
@@ -82,9 +82,9 @@ func _is_editable_property(prop_name):
 				return prop.type
 	return false
 
-func _set_script_to_instance(value):
+func _set_resource_to_instance(value):
 	_instanceable_resource = INSTANTIATE_NONE
-	script_to_instance = value
+	resource_to_instance = value
 	if ResourceLoader.exists(value):
 		var resource = load(value)
 		if resource is PackedScene:
