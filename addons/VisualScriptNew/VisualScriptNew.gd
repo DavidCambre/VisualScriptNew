@@ -86,7 +86,7 @@ func _get_property_value(prop_name):
 	var instance = _get_new_instance()
 	if instance:
 		if prop_name in instance:
-			return instance.get_property_default_value(prop_name)
+			return instance.get(prop_name)
 	return false
 
 func _set_resource_to_instance(value):
