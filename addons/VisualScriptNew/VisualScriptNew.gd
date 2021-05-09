@@ -82,6 +82,13 @@ func _is_editable_property(prop_name):
 				return prop.type
 	return false
 
+func _get_property_value(prop_name):
+	var instance = _get_new_instance()
+	if instance:
+		if prop_name in instance:
+			return instance.get_property_default_value(prop_name)
+	return false
+
 func _set_resource_to_instance(value):
 	_instanceable_resource = INSTANTIATE_NONE
 	resource_to_instance = value
@@ -112,7 +119,15 @@ func _update_edit_prop(value):
 			editing_list.append(edit_property)
 			call_deferred("property_list_changed_notify")
 			ports_changed_notify()
+			var v = _get_property_value(edit_property)
+			var i = _get_property_input_port(edit_property)
+			set_default_input_value(i, v)
 
+func _get_property_input_port(prop_name):
+	for i in _get_input_value_port_count():
+		if _get_input_value_port_name(i) == prop_name:
+			return i
+			
 func _set_editing_list(value):
 	editing_list = value
 	ports_changed_notify()
